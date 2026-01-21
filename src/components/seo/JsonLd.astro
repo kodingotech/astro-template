@@ -1,0 +1,44 @@
+---
+import { SITE } from '@/config/site';
+
+interface Props {
+    type?: 'Organization' | 'WebSite' | 'Article' | 'LocalBusiness';
+    data?: any;
+}
+
+const { type = 'Organization', data = {} } = Astro.props;
+
+const schemas: Record<string, any> = {
+    Organization: {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: SITE.name,
+        url: SITE.url,
+        logo: `${SITE.url}/logo.png`,
+        sameAs: Object.values(SITE.social),
+        contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: SITE.contact.phone,
+        contactType: 'customer service',
+        email: SITE.contact.email,
+        },
+        ...data,
+    },
+    WebSite: {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: SITE.name,
+        url: SITE.url,
+        potentialAction: {
+        '@type': 'SearchAction',
+        target: `${SITE.url}/search?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+        },
+        ...data,
+    },
+};
+
+const schema = schemas[type] || schemas.Organization;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
