@@ -1,0 +1,66 @@
+/* ================================
+   Base reveal states
+================================ */
+
+[data-motion] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  will-change: opacity, transform;
+}
+
+[data-motion].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ================================
+   Variants (mirip Framer Motion)
+================================ */
+
+[data-motion="fade"] {
+  transform: none;
+}
+
+[data-motion="slide-up"] {
+  transform: translateY(32px);
+}
+
+[data-motion="slide-down"] {
+  transform: translateY(-32px);
+}
+
+[data-motion="slide-left"] {
+  transform: translateX(32px);
+}
+
+[data-motion="slide-right"] {
+  transform: translateX(-32px);
+}
+
+[data-motion="scale"] {
+  transform: scale(0.95);
+}
+
+/* ================================
+   Timing utilities (stagger)
+================================ */
+
+[data-delay="100"] { transition-delay: 100ms; }
+[data-delay="200"] { transition-delay: 200ms; }
+[data-delay="300"] { transition-delay: 300ms; }
+[data-delay="400"] { transition-delay: 400ms; }
+
+/* ================================
+   Reduced motion support
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-motion] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
