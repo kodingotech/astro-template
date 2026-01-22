@@ -1,0 +1,91 @@
+---
+import { MessageCircle, X } from '@lucide/astro';
+import { SITE } from '@/config/site';
+---
+
+<!-- Popup Card -->
+<div
+  id="wa-popup"
+  class="fixed bottom-24 right-6 z-50 w-80 bg-white rounded-2xl shadow-2xl hidden animate-scale-in"
+>
+  <button
+    id="wa-close"
+    class="absolute top-3 right-3 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+    aria-label="Close"
+  >
+    <X class="w-4 h-4 text-gray-500" />
+  </button>
+
+  <div class="p-6">
+    <!-- Header -->
+    <div class="flex items-center gap-3 mb-4">
+      <div
+        class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center"
+      >
+        <span class="text-white font-bold text-lg">
+          {SITE.name[0]}
+        </span>
+      </div>
+      <div>
+        <h3 class="font-bold text-gray-900">{SITE.name}</h3>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span class="text-xs text-gray-500">Online • Response &lt;2 jam</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="bg-gray-50 rounded-xl p-3 mb-4">
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Konsultasi <strong class="text-gray-900">GRATIS</strong> untuk kebutuhan
+        digital Anda 🚀
+      </p>
+    </div>
+
+    <!-- CTA -->
+    
+      href={`https://wa.me/${SITE.contact.whatsapp}?text=Halo%20${SITE.name},%20saya%20ingin%20konsultasi`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#25D366] hover:bg-[#20BD5A] text-white font-semibold rounded-xl transition-all duration-200"
+    >
+      <MessageCircle class="w-5 h-5" />
+      Chat via WhatsApp
+    </a>
+  </div>
+</div>
+
+<!-- Floating Button -->
+<button
+  id="wa-button"
+  class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110 animate-bounce-gentle"
+  aria-label="WhatsApp"
+>
+  <MessageCircle class="w-7 h-7 text-white" />
+</button>
+
+<script>
+  const button = document.getElementById('wa-button');
+  const popup = document.getElementById('wa-popup');
+  const closeBtn = document.getElementById('wa-close');
+
+  button?.addEventListener('click', () => {
+    popup?.classList.toggle('hidden');
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    popup?.classList.add('hidden');
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (
+      !button?.contains(e.target as Node) &&
+      !popup?.contains(e.target as Node)
+    ) {
+      popup?.classList.add('hidden');
+    }
+  });
+</script>

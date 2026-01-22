@@ -1,0 +1,179 @@
+---
+import { SITE } from '@/config/site';
+import { footerLinks } from '@/config/navigation';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+} from '@lucide/astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-foreground text-background">
+  <div class="container-custom section-padding">
+    <!-- Main Footer Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+      <!-- Brand Column -->
+      <div class="lg:col-span-2">
+        <a href="/" class="flex items-center gap-3 mb-6 group">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center"
+          >
+            <span class="text-white font-bold text-xl">L</span>
+          </div>
+          <span class="font-display font-bold text-xl text-background">
+            {SITE.name}
+          </span>
+        </a>
+        <p class="text-background/70 mb-6 leading-relaxed">
+          {SITE.description}
+        </p>
+
+        <!-- Contact Info -->
+        <div class="space-y-3">
+          
+            href={`mailto:${SITE.contact.email}`}
+            class="flex items-center gap-3 text-background/70 hover:text-background transition-colors"
+          >
+            <Mail class="w-5 h-5" />
+            <span class="text-sm">{SITE.contact.email}</span>
+          </a>
+          
+            href={`tel:${SITE.contact.phone}`}
+            class="flex items-center gap-3 text-background/70 hover:text-background transition-colors"
+          >
+            <Phone class="w-5 h-5" />
+            <span class="text-sm">{SITE.contact.phone}</span>
+          </a>
+          <div class="flex items-start gap-3 text-background/70">
+            <MapPin class="w-5 h-5 mt-0.5 flex-shrink-0" />
+            <span class="text-sm">{SITE.contact.address}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Links Columns -->
+      <div>
+        <h3 class="font-semibold text-background mb-4">Company</h3>
+        <ul class="space-y-2">
+          {
+            footerLinks.company.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-background/70 hover:text-background transition-colors"
+                >
+                  {link.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-background mb-4">Services</h3>
+        <ul class="space-y-2">
+          {
+            footerLinks.services.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-background/70 hover:text-background transition-colors"
+                >
+                  {link.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-background mb-4">Resources</h3>
+        <ul class="space-y-2">
+          {
+            footerLinks.resources.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-background/70 hover:text-background transition-colors"
+                >
+                  {link.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div
+      class="pt-8 border-t border-background/10 flex flex-col md:flex-row justify-between items-center gap-4"
+    >
+      <p class="text-sm text-background/60">
+        © {currentYear} {SITE.name}. All rights reserved.
+      </p>
+
+      <!-- Social Links -->
+      <div class="flex items-center gap-4">
+        
+          href={SITE.social.facebook}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-lg bg-background/10 hover:bg-background/20 flex items-center justify-center text-background/70 hover:text-background transition-all"
+          aria-label="Facebook"
+        >
+          <Facebook class="w-5 h-5" />
+        </a>
+        
+          href={SITE.social.twitter}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-lg bg-background/10 hover:bg-background/20 flex items-center justify-center text-background/70 hover:text-background transition-all"
+          aria-label="Twitter"
+        >
+          <Twitter class="w-5 h-5" />
+        </a>
+        
+          href={SITE.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-lg bg-background/10 hover:bg-background/20 flex items-center justify-center text-background/70 hover:text-background transition-all"
+          aria-label="Instagram"
+        >
+          <Instagram class="w-5 h-5" />
+        </a>
+        
+          href={SITE.social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-lg bg-background/10 hover:bg-background/20 flex items-center justify-center text-background/70 hover:text-background transition-all"
+          aria-label="LinkedIn"
+        >
+          <Linkedin class="w-5 h-5" />
+        </a>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="flex items-center gap-6">
+        {
+          footerLinks.legal.map((link) => (
+            <a
+              href={link.href}
+              class="text-sm text-background/60 hover:text-background transition-colors"
+            >
+              {link.name}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</footer>

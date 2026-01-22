@@ -4,9 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Default color palette (customizable per project)
+        // Base colors using CSS variables
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+
         primary: {
-          DEFAULT: '#0066FF',
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
           50: '#E6F0FF',
           100: '#CCE0FF',
           200: '#99C2FF',
@@ -19,7 +26,8 @@ export default {
           900: '#001433',
         },
         secondary: {
-          DEFAULT: '#8B5CF6',
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
           50: '#F5F3FF',
           100: '#EDE9FE',
           200: '#DDD6FE',
@@ -32,7 +40,8 @@ export default {
           900: '#4C1D95',
         },
         accent: {
-          DEFAULT: '#00D9FF',
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
           50: '#E6FAFF',
           100: '#CCF5FF',
           200: '#99EBFF',
@@ -44,10 +53,31 @@ export default {
           800: '#005766',
           900: '#002B33',
         },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Space Grotesk', 'Inter', 'sans-serif'],
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
         // === FADE ANIMATIONS ===

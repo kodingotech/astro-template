@@ -1,0 +1,34 @@
+---
+import '@/styles/global.css';
+import Navbar from './Navbar.astro';
+import SEO from '../seo/SEO.astro';
+import JsonLd from '../seo/JsonLd.astro';
+import type { SEOProps } from '../../utils/seo';
+import Footer from './Footer.astro';
+
+interface Props extends SEOProps {
+  class?: string;
+}
+
+const { class: className, ...seoProps } = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <SEO {...seoProps} />
+    <JsonLd type="Organization" />
+    <JsonLd type="WebSite" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Navbar />
+    <main class:list={['flex-grow', className]}>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

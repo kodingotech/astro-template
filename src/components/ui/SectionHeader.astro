@@ -1,0 +1,50 @@
+---
+interface Props {
+  label?: string;
+  title: string;
+  description?: string;
+  centered?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  title,
+  description,
+  centered = true,
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'mb-12 md:mb-16',
+    centered && 'text-center',
+    className,
+  ]}
+>
+  {
+    label && (
+      <p class="label text-primary mb-4 animate-fade-in-up">
+        {label}
+      </p>
+    )
+  }
+  <h2
+    class="heading-xl text-foreground mb-4 animate-fade-in-up animate-delay-100"
+  >
+    {title}
+  </h2>
+  {
+    description && (
+      <p
+        class:list={[
+          'body-md text-muted-foreground animate-fade-in-up animate-delay-200',
+          centered && 'max-w-2xl mx-auto',
+        ]}
+      >
+        {description}
+      </p>
+    )
+  }
+</div>

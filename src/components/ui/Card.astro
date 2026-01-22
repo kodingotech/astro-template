@@ -1,0 +1,15 @@
+---
+interface Props {
+  href?: string;
+  hover?: boolean;
+  class?: string;
+}
+
+const { href, hover = false, class: className } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const cardClass = hover ? 'card-hover' : 'card';
+---
+
+<Tag href={href} class:list={[cardClass, className]}>
+  <slot />
+</Tag>
