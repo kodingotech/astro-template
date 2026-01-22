@@ -1,0 +1,428 @@
+(prompt)
+
+== di bawah ini adalah template astro saya ==
+kurang lebih gini folder structurenya
+src
+│   ├── assets
+│   │   ├── astro.svg
+│   │   └── background.svg
+│   ├── components
+│   │   ├── Footer.astro
+│   │   └── Navbar.astro
+│   ├── layouts
+│   │   └── Layout.astro
+│   ├── pages
+│   │   ├── about.astro
+│   │   └── index.astro
+│   └── styles
+│       └── global.css
+
+tailwind.config.mjs
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      keyframes: {
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'scale-in': {
+          '0%': { opacity: '0', transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        'slide-down': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 0.8s ease-out',
+        'fade-in': 'fade-in 0.6s ease-out',
+        'scale-in': 'scale-in 0.5s ease-out',
+        'slide-down': 'slide-down 0.3s ease-out',
+        'float': 'float 3s ease-in-out infinite',
+      },
+      animationDelay: {
+        100: '100ms',
+        200: '200ms',
+        300: '300ms',
+      },
+    },
+  },
+  plugins: [
+    function({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'animate-delay': (value) => ({
+            animationDelay: value,
+          }),
+        },
+        { values: theme('animationDelay') }
+      );
+    },
+  ],
+};
+
+src/styles/global.css
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui;
+}
+
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+src/layouts/Layout.astro
+---
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+
+import Footer from '@/components/Footer.astro';
+import Navbar from '@/components/Navbar.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = 'Build amazing things with our platform' 
+} = Astro.props;
+
+const site = Astro.site ?? 'http://localhost:4321';
+
+const canonicalURL = new URL(Astro.url.pathname, site);
+const ogImage = new URL('/og-image.jpg', site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen bg-gray-50 flex flex-col">
+    <Navbar />
+    
+    <main class="flex-1">
+      <slot />
+    </main>
+    
+    <Footer />
+  </body>
+</html>
+
+src/components/Navbar.astro
+---
+import { Menu, X } from '@lucide/astro';
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
+        Logo
+      </a>
+      
+      <!-- Desktop Menu -->
+      <ul class="hidden md:flex items-center gap-8">
+        {navLinks.map(link => (
+          <li>
+            <a 
+              href={link.href}
+              class={`font-medium transition-colors ${
+                currentPath === link.href 
+                  ? 'text-blue-600' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      
+      <!-- Mobile Toggle -->
+      <button 
+        id="mobile-toggle"
+        class="md:hidden p-2 text-gray-600 hover:text-gray-900"
+        aria-label="Toggle menu"
+      >
+        <Menu class="w-6 h-6" id="menu-icon" />
+        <X class="w-6 h-6 hidden" id="close-icon" />
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4 animate-slide-down">
+      <ul class="flex flex-col gap-2">
+        {navLinks.map(link => (
+          <li>
+            <a 
+              href={link.href}
+              class={`block px-4 py-2 rounded-lg ${
+                currentPath === link.href
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Spacer -->
+<div class="h-16"></div>
+
+<script>
+  const toggle = document.getElementById('mobile-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  const closeIcon = document.getElementById('close-icon');
+  
+  toggle?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    menuIcon?.classList.toggle('hidden');
+    closeIcon?.classList.toggle('hidden');
+  });
+</script>
+
+src/components/Footer.astro
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-white border-t border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <!-- Left -->
+      <p class="text-sm text-gray-500">
+        © {currentYear} My Awesome Site. All rights reserved.
+      </p>
+
+      <!-- Right -->
+      <div class="flex items-center gap-6">
+        <a
+          href="/"
+          class="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+        >
+          Home
+        </a>
+        <a
+          href="/about"
+          class="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+        >
+          About
+        </a>
+        <a
+          href="mailto:hello@example.com"
+          class="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+        >
+          Contact
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+src/pages/index.astro
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
+import { ArrowRight } from '@lucide/astro';
+---
+
+<Layout title="Home - My Awesome Site">
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6 animate-fade-in-up">
+        Build Something
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+          Amazing
+        </span>
+      </h1>
+      
+      <p class="text-xl text-gray-600 mb-8 animate-fade-in-up animate-delay-100">
+        Transform your ideas into reality with our powerful platform
+      </p>
+      
+      <div class="flex flex-wrap gap-4 justify-center animate-fade-in-up animate-delay-200">
+        <a 
+          href="/about"
+          class="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all hover:scale-105"
+        >
+          Get Started
+          <ArrowRight class="w-5 h-5" />
+        </a>
+        
+        <a 
+          href="/about"
+          class="inline-flex items-center gap-2 px-8 py-4 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+        >
+          Learn More
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="py-20 px-4 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Us</h2>
+        <p class="text-xl text-gray-600">Simple, powerful, and easy to use</p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        {[
+          { title: 'Fast', desc: 'Lightning fast performance' },
+          { title: 'Secure', desc: 'Enterprise-grade security' },
+          { title: 'Scalable', desc: 'Grows with your business' },
+        ].map((feature, i) => (
+          <div 
+            class="p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all animate-fade-in"
+            style={`animation-delay: ${i * 100}ms;`}
+          >
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+            <p class="text-gray-600">{feature.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+src/pages/about.astro
+---
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout title="About Us - My Awesome Site">
+  <section class="py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6 animate-fade-in-up">
+        About Us
+      </h1>
+      
+      <p class="text-xl text-gray-600 mb-8 animate-fade-in-up animate-delay-100">
+        We're building the future of digital experiences.
+      </p>
+      
+      <div class="prose prose-lg animate-fade-in-up animate-delay-200">
+        <p class="text-gray-700 leading-relaxed">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+          quis nostrud exercitation ullamco laboris.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+tsconfig.json
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "ignoreDeprecations": "6.0"
+  }
+}
+
+
+astro.config.mjs
+// @ts-check
+import { defineConfig } from 'astro/config';
+
+import tailwindcss from '@tailwindcss/vite';
+
+// https://astro.build/config
+export default defineConfig({
+  // site: 'https://example.com',
+  vite: {
+    plugins: [tailwindcss()]
+  }
+});
+
+package.json
+{
+  "name": "astro-template",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@fontsource/plus-jakarta-sans": "^5.2.8",
+    "@lucide/astro": "^0.562.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.11"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.18"
+  }
+}
+
+== di bawah ini code react yg saya ingin convert ke astro (mengikuti template yg sudah saya buat), bantu saya ==
